@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 07c4c3e446c1de840808d5005a65c6c9
+guid: 0d1b34545b6b88742bff822588bef1d9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6977937172876042345
-    second: morado_0
+      213: -2694282479985453959
+    second: jesus-christ-and-the-sheep-chibi-cartoon-character-vector-removebg-preview_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -97,7 +97,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
+    buildTarget: WindowsStoreApps
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: morado_0
+      name: jesus-christ-and-the-sheep-chibi-cartoon-character-vector-removebg-preview_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1920
-        height: 1200
+        x: 14
+        y: 65
+        width: 480
+        height: 370
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 960254653ec96d060800000000000000
-      internalID: 6977937172876042345
+      spriteID: 97498effb5cfb9ad0800000000000000
+      internalID: -2694282479985453959
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      morado_0: 6977937172876042345
+      jesus-christ-and-the-sheep-chibi-cartoon-character-vector-removebg-preview_0: -2694282479985453959
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
