@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class OpenQuestion : Question
+public class AbiertasQuestion : Question
 {
     private string answer;
     private string  versiculo;
     private string difficult;
 
 
-    public OpenQuestion(string pregunta, string answer, string versiculo, string difficult) : base (pregunta)
+    public AbiertasQuestion(string pregunta, string answer, string versiculo, string difficult) : base (pregunta)
     {
         this.answer = answer;
         this.versiculo = versiculo;

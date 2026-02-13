@@ -2431,7 +2431,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: versiculo
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a3163b83318722144840c5e4f4bf5122, type: 2}
   m_sharedMaterial: {fileID: -6771796493334280358, guid: a3163b83318722144840c5e4f4bf5122, type: 2}

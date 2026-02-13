@@ -74,7 +74,7 @@ public class ControllerGame : MonoBehaviour
                 TrueFalseQuestion trueFalseQ = (TrueFalseQuestion)currentQuestion;
                 ShowTrueFalseQuestion(trueFalseQ);
             }
-            else if (currentQuestion is OpenQuestion)
+            else if (currentQuestion is AbiertasQuestion)
             {
                 ShowOpenQuestion();
             }
@@ -130,7 +130,7 @@ public class ControllerGame : MonoBehaviour
         {
             //Debug.Log(line);
             string[] datos = line.Split('-');
-            OpenQuestion question = new OpenQuestion(datos[0], datos[1], datos[2], datos[3]);
+            AbiertasQuestion question = new AbiertasQuestion(datos[0], datos[1], datos[2], datos[3]);
             list_questions.Add(question);
             
         }
@@ -161,7 +161,7 @@ public class ControllerGame : MonoBehaviour
         switch (option)
         {
             case 1:
-                if (option1.text == multipleQ.Answer)
+                if (option1.text.Equals(multipleQ.Answer))
                 {
                     title.text = "Correcto";
                     description.text = multipleQ.Versiculo;
@@ -251,7 +251,7 @@ public class ControllerGame : MonoBehaviour
     }
      public void OpenAnswerVerify()
     {
-        OpenQuestion openQ = (OpenQuestion)currentQuestion;
+        AbiertasQuestion openQ = (AbiertasQuestion)currentQuestion;
         answerOpen.text = openQ.Answer;
         versiculoOpen.text = openQ.Versiculo;
     }
