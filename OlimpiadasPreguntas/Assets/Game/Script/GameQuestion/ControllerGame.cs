@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -36,6 +37,7 @@ public class ControllerGame : MonoBehaviour
     int index;
     int lastIndex = -1;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         list_questions.Clear();
@@ -55,18 +57,23 @@ public class ControllerGame : MonoBehaviour
     public void ShowInScene()
     {
         do { 
-        index = UnityEngine.Random.Range(0, list_questions.Count);
+        index = UnityEngine.Random.Range(0, list_questions.Count); // genera un numero de pregunta al azar entre todas la lista de preguntas 
         }
-        while (index == lastIndex) ;
+        while (index == lastIndex) ; // bucle que revisa que mientras el numero que salio es igual al dela pregunta anterior 
 
-        lastIndex = index;
-        currentQuestion = list_questions[index];
+        lastIndex = index; // si es igual al de la pregunta anterior le dice que vuelva a buscar otra pregunta al azar porque esa ya salio
+        //solo cuando el numero o el indice de la pregunta es diferente , este ciclo se rompe y el programa continua
+        currentQuestion = list_questions[index]; // acceso por indice // tomara el indice de la pregunta que le pedimos arriba que buscara aleatoriamente y lo convertira en la pregunta actual  
+        //bloque para evitar que salga la misma pregunta dos veces seguidas 
 
-        if (currentQuestion != null)
+        if (currentQuestion != null) // validacion de seguridad
+            // null= nada o vacio , si la pregunta existe y no esta vacio entonces podra mostrarla en pantalla 
         {
-            if (currentQuestion is MultipleQuestion)
+            if (currentQuestion is MultipleQuestion) // la palabra clave is se utiliza para que el programa entienda que tipo de pregunta tiene que prosesar o mostrar
+            // la palabra clave is actua como un clasificador para mandar cada pregunta al panel correcto 
             {
                 MultipleQuestion multipleQ = (MultipleQuestion)currentQuestion;
+               //si la pregunta actual es de tipo multiple has esto;
                 ShowMultipleQuestion(multipleQ);
             }
             else if (currentQuestion is TrueFalseQuestion)
