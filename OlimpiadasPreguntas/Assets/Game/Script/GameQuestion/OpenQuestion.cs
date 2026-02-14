@@ -7,7 +7,7 @@ public class AbiertasQuestion : Question
     private string difficult;
 
 
-    public AbiertasQuestion(string pregunta, string answer, string versiculo, string difficult) : base (pregunta)
+    public AbiertasQuestion(string pregunta, string answer, string versiculo, string difficult) : base (pregunta, false)
     {
         this.answer = answer;
         this.versiculo = versiculo;

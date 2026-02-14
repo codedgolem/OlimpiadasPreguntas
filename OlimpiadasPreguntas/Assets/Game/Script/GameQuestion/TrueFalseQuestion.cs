@@ -6,7 +6,7 @@ public class TrueFalseQuestion : Question
     private bool answer;
     private string versiculo;
     private string difficult;
-    public TrueFalseQuestion(string question, bool answer, string versiculo, string difficult) : base (question)
+    public TrueFalseQuestion(string question, bool answer, string versiculo, string difficult) : base (question, false)
     {
         this.answer = answer;
         this.versiculo = versiculo;
