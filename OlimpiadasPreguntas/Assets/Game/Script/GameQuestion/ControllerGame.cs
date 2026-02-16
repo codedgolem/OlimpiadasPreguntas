@@ -161,17 +161,12 @@ public class ControllerGame : MonoBehaviour
         {
             panelNextLevel.SetActive(true);
             int totalQuestions = correctAnswers + wrongAnswers;
-            //float porcentaje = 0;
-
-            //if (totalQuestions > 0)
-            //    porcentaje = (correctAnswers / (float)totalQuestions) * 100; //Operacion para sacar el porcentaje de respuestas correctas,
-            //                                                                 //el float se utiliza para convertir el resultado a un numero decimal y no entero
+            
 
             title.text = "Juego Terminado";
             description.text =
                 "Correctas " + correctAnswers +
                 "\nIncorrectas " + wrongAnswers +
-                //"\nPorcentaje: " + porcentaje.ToString("F1") + "%" + // El ToString("F1") se utiliza para formatear el porcentaje con un decimal
                 "\n¡Gracias por jugar!";
 
         }
