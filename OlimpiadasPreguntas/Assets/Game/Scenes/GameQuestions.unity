@@ -3638,6 +3638,7 @@ MonoBehaviour:
   panelNextLevel: {fileID: 454919598}
   answerOpen: {fileID: 576540428}
   versiculoOpen: {fileID: 901029844}
+  buttonNext: {fileID: 56667479}
 --- !u!4 &1554548741
 Transform:
   m_ObjectHideFlags: 0

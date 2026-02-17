@@ -45,7 +45,9 @@ public class ControllerGame : MonoBehaviour
 
     //Contador 
     int correctAnswers = 0;
-    int wrongAnswers = 0;
+    bool stateAnswer;
+
+    public GameObject buttonNext;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -69,6 +71,7 @@ public class ControllerGame : MonoBehaviour
 
     public void ShowInScene()
     {
+        stateAnswer = true;
         Debug.Log(list_questionsEasy.Count);
         Debug.Log(numEasy);
         if (list_questionsEasy.Count != numEasy)
@@ -160,14 +163,16 @@ public class ControllerGame : MonoBehaviour
         else
         {
             panelNextLevel.SetActive(true);
-            int totalQuestions = correctAnswers + wrongAnswers;
+            int totalQuestions = list_questionsEasy.Count + list_questionsHard.Count;
             
 
             title.text = "Juego Terminado";
             description.text =
-                "Correctas " + correctAnswers +
-                "\nIncorrectas " + wrongAnswers +
+                "Preguntas correctas " + correctAnswers +
+                "\nPreguntas totales " + totalQuestions + 
                 "\n¡Gracias por jugar!";
+
+            buttonNext.SetActive(false);
 
         }
     }
@@ -293,13 +298,18 @@ public class ControllerGame : MonoBehaviour
         {
             title.text = "Correcto";
             description.text = multipleQ.Versiculo;
-            correctAnswers++;
+            if (stateAnswer == true)
+            {
+                correctAnswers++;
+                stateAnswer = false;
+            }
+                
         }
         else
         {
             title.text = "Incorrecto";
             description.text = "Intenta de nuevo";
-            wrongAnswers++;
+            
         }
         //ShowInScene();
         panelNextLevel.SetActive(true);
@@ -326,14 +336,19 @@ public class ControllerGame : MonoBehaviour
         {
             title.text = "Correcto";
             description.text = trueFalseQ.Versiculo;
-            correctAnswers++;
+            if (stateAnswer == true)
+            {
+                correctAnswers++;
+                stateAnswer = false;
+            }
+
 
         }
         else
         {
             title.text = "Incorrecto";
             description.text = "Intenta de nuevo";
-            wrongAnswers++;
+        
         }
     }
 
