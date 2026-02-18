@@ -51,7 +51,7 @@ public class ControllerGame : MonoBehaviour
     //Contador
     private int correctAnswers = 0;
     private bool stateAnswer;
-
+   
     public AudioSource musicaFondo;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -67,7 +67,6 @@ public class ControllerGame : MonoBehaviour
         
 
         panelInicio.SetActive(true);
-        musicaFondo.Play();
         panelJuego.SetActive(false);
         panelNextLevel.SetActive(false);
 
