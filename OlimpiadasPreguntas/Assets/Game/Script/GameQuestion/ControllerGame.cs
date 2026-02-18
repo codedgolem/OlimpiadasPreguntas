@@ -231,27 +231,54 @@ public class ControllerGame : MonoBehaviour
         switch (option)
         {
             case 1:
-                correct = option1.text.Equals(multipleQ.Answer);
-                break;
+                if (option1.text.Equals(multipleQ.Answer))
+                {
+                    correct = true;
+                    break;
+                }else
+                {
+                    correct = false;
+                    break;
+                }
             case 2:
-                correct = option2.text.Equals(multipleQ.Answer);
-                break;
+                if (option2.text.Equals(multipleQ.Answer))
+                {
+                    correct = true;
+                    break;
+                }
+                else
+                {
+                    correct = false;
+                    break;
+                }
             case 3:
-                correct = option3.text.Equals(multipleQ.Answer);
-                break;
+                if (option3.text.Equals(multipleQ.Answer))
+                {
+                    correct = true;
+                    break;
+                }
+                else
+                {
+                    correct = false;
+                    break;
+                }
             case 4:
-                correct = option4.text.Equals(multipleQ.Answer);
-                break;
+                if (option4.text.Equals(multipleQ.Answer))
+                {
+                    correct = true;
+                    break;
+                }
+                else
+                {
+                    correct = false;
+                    break;
+                }
         }
-        if (correct)
+        if (correct == true)
         {
             title.text = "Correcto";
             description.text = multipleQ.Versiculo;
             if (stateAnswer.Equals(true)) { correctAnswers++; stateAnswer = false; }
-            {
-                correctAnswers++;
-                stateAnswer = false;
-            }
         }
         else
         {
