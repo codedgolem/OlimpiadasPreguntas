@@ -1,10 +1,8 @@
-using JetBrains.Annotations;
-using NUnit.Framework;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,13 +19,20 @@ public class ControllerGame : MonoBehaviour
     public TextMeshProUGUI description;
     public TextMeshProUGUI title;
     public TextMeshProUGUI difficulty;
-    //Para paneles
+
+    //Paneles contenedores principales
+    public GameObject panelInicio;
+    public GameObject panelJuego;
+
+
+    //Para paneles de preguntas
     public GameObject panelOpen;
     public GameObject panelTrueFalse;
     public GameObject panelMultiple;
     public GameObject panelNextLevel;
-    //para truefalse questions
-    //
+
+    public GameObject buttonNext;
+
     //Para open questions
     public TextMeshProUGUI answerOpen;
     public TextMeshProUGUI versiculoOpen;
@@ -35,20 +40,19 @@ public class ControllerGame : MonoBehaviour
     //Lista de preguntas o variables inciales
     List<Question> list_questionsEasy = new List<Question>();
     List<Question> list_questionsHard = new List<Question>();
+    private List<Question> currentList; // Lista que apunta a la dificultad actual
+    private Question currentQuestion;
+    private int index;
+    private int lastIndexE = -1;
+    private int lastIndexH = -1;
+    private int numEasy;
+    private int numHard;
 
-    Question currentQuestion;
-    int index;
-    int lastIndexE = -1;
-    int lastIndexH = -1;
-    int numEasy;
-    int numHard;
+    //Contador
+    private int correctAnswers = 0;
+    private bool stateAnswer;
 
-    //Contador 
-    int correctAnswers = 0;
-    bool stateAnswer;
-
-    public GameObject buttonNext;
-
+    public AudioSource musicaFondo;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -60,123 +64,92 @@ public class ControllerGame : MonoBehaviour
         LoadQuestionsOpen("ABIERTAS_2024.txt");
         Debug.Log("Preguntas fáciles cargadas: " + list_questionsEasy.Count);
         Debug.Log("Preguntas difíciles cargadas: " + list_questionsHard.Count);
-        ShowInScene();
+        
+
+        panelInicio.SetActive(true);
+        musicaFondo.Play();
+        panelJuego.SetActive(false);
+        panelNextLevel.SetActive(false);
+
+        currentList = list_questionsEasy;
+
     }
 
-    // Update is called once per frame
+    public void ClickStartGame()
+    {
+        panelInicio.SetActive(false);
+        panelJuego.SetActive(true);
+
+        ShowInScene(); // Inicio de Juego
+
+
+    }
+
+    
     void Update()
     {
 
     }
 
+    
     public void ShowInScene()
     {
         stateAnswer = true;
-        Debug.Log(list_questionsEasy.Count);
-        Debug.Log(numEasy);
-        if (list_questionsEasy.Count != numEasy)
+        title.text = ""; 
+        description.text = "";
+
+        // Cambiado == por .Equals() para comparar la lista actual
+        if (currentList.Equals(list_questionsEasy) && numEasy < list_questionsEasy.Count)
         {
-            do
-            {
-                index = UnityEngine.Random.Range(0, list_questionsEasy.Count); // genera un numero de pregunta al azar entre todas la lista de preguntas 
-            }
-            while (index == lastIndexE || list_questionsEasy[index].Estado == true);
+            do {
+                index = UnityEngine.Random.Range(0, list_questionsEasy.Count);
+            } while (index.Equals(lastIndexE) || list_questionsEasy[index].Estado.Equals(true));
 
-            numEasy += 1;
-
-            lastIndexE = index; // si es igual al de la pregunta anterior le dice que vuelva a buscar otra pregunta al azar porque esa ya salio
-                                //solo cuando el numero o el indice de la pregunta es diferente , este ciclo se rompe y el programa continua
-            currentQuestion = list_questionsEasy[index]; // acceso por indice // tomara el indice de la pregunta que le pedimos arriba que buscara aleatoriamente y lo convertira en la pregunta actual  
-
-            //bloque para evitar que salga la misma pregunta dos veces seguidas 
-            if (currentQuestion != null) // validacion de seguridad
-                                         // null= nada o vacio , si la pregunta existe y no esta vacio entonces podra mostrarla en pantalla 
-            {
-                if (currentQuestion is MultipleQuestion) // la palabra clave is se utiliza para que el programa entienda que tipo de pregunta tiene que prosesar o mostrar
-                // la palabra clave is actua como un clasificador para mandar cada pregunta al panel correcto 
-                {
-                    MultipleQuestion multipleQ = (MultipleQuestion)currentQuestion;
-                    //si la pregunta actual es de tipo multiple has esto;
-                    ShowMultipleQuestion(multipleQ);
-                }
-                else if (currentQuestion is TrueFalseQuestion)
-                {
-                    TrueFalseQuestion trueFalseQ = (TrueFalseQuestion)currentQuestion;
-                    ShowTrueFalseQuestion(trueFalseQ);
-                }
-                else if (currentQuestion is AbiertasQuestion)
-                {
-                    AbiertasQuestion openQ = (AbiertasQuestion)currentQuestion;
-                    ShowOpenQuestion(openQ);
-                }
-            }
+            lastIndexE = index;
+            numEasy++;
+            currentQuestion = list_questionsEasy[index];
+            SetQuestionPanel();
         }
-
-        //ENTRA LAS PREGUNTAS DIFICILES CUANDO SE TERMINAN LAS FACILES
-
-
-        else if (list_questionsHard.Count != numHard)
+        else if (numHard < list_questionsHard.Count)
         {
-            Debug.Log("ingreso");
-            if (numHard == 0)
+            if (numHard.Equals(0))
             {
+                currentList = list_questionsHard; // Cambiamos el puntero a la lista difícil
                 panelNextLevel.SetActive(true);
-                title.text = "¡Felicidades! Has completado el nivel facil.";
-                description.text = "Prepárate para el siguiente nivel con preguntas aún más desafiantes.";
-
+                title.text = "<size=150%>¡Felicidades! Nivel fácil completado.<size=150%>";
+                description.text = "Prepárate para poner a prueba tus conocimientos de la palabra de Dios con un nivel difícil.";
+                
             }
 
-            do
-            {
+            do {
                 index = UnityEngine.Random.Range(0, list_questionsHard.Count);
-                Debug.Log("int");
-            }
-            while (index == lastIndexH || list_questionsHard[index].Estado == true);
+            } while (index.Equals(lastIndexH) || list_questionsHard[index].Estado.Equals(true));
 
-            lastIndexH = index;
-            numHard += 1;
-            currentQuestion = list_questionsHard[index];
-
-            if (currentQuestion != null)
-
-            {
-                if (currentQuestion is MultipleQuestion)
-                {
-                    MultipleQuestion multipleQ = (MultipleQuestion)currentQuestion;
-                    ShowMultipleQuestion(multipleQ);
-                }
-                else if (currentQuestion is TrueFalseQuestion)
-                {
-                    TrueFalseQuestion trueFalseQ = (TrueFalseQuestion)currentQuestion;
-                    ShowTrueFalseQuestion(trueFalseQ);
-                }
-                else if (currentQuestion is AbiertasQuestion)
-                {
-                    AbiertasQuestion openQ = (AbiertasQuestion)currentQuestion;
-                    ShowOpenQuestion(openQ);
-                }
-            }
+            lastIndexH = index; // si es igual al de la pregunta anterior le dice que vuelva a buscar otra pregunta al azar porque esa ya salio
+                                //solo cuando el numero o el indice de la pregunta es diferente , este ciclo se rompe y el programa continua
+            numHard++;
+            currentQuestion = list_questionsHard[index]; // acceso por indice // tomara el indice de la pregunta que le pedimos arriba que buscara aleatoriamente y lo convertira en la pregunta actual  
+            SetQuestionPanel();
         }
-
-        //FINAL DEL JUEGO CUANDO SE TERMINAN LAS PREGUNTAS DIFICILES
-
         else
         {
-            panelNextLevel.SetActive(true);
-            int totalQuestions = list_questionsEasy.Count + list_questionsHard.Count;
-            
-
-            title.text = "Juego Terminado";
-            description.text =
-                "Preguntas correctas " + correctAnswers +
-                "\nPreguntas totales " + totalQuestions + 
-                "\n¡Gracias por jugar!";
-
-            buttonNext.SetActive(false);
-
+            GameOver();
         }
     }
-    //LOAD QUESTIONS --------------------------------------------
+
+    private void SetQuestionPanel()
+    {
+        if (currentQuestion is MultipleQuestion) // la palabra clave is se utiliza para que el programa entienda que tipo de pregunta tiene que prosesar o mostrar
+                                                 // la palabra clave is actua como un clasificador para mandar cada pregunta al panel correcto 
+            ShowMultipleQuestion((MultipleQuestion)currentQuestion);
+        else if (currentQuestion is TrueFalseQuestion)
+            ShowTrueFalseQuestion((TrueFalseQuestion)currentQuestion);
+        else if (currentQuestion is AbiertasQuestion)
+            ShowOpenQuestion((AbiertasQuestion)currentQuestion);
+    }
+    
+ 
+    //METODOS DE CARGAR DATOS
     public void LoadQuestionsMultiple(String filename)
     {
         string route = Path.Combine(Application.streamingAssetsPath, filename);
@@ -199,10 +172,6 @@ public class ControllerGame : MonoBehaviour
             {
                 list_questionsHard.Add(question);
             }
-
-
-
-
         }
         info.Close();
     }
@@ -253,29 +222,9 @@ public class ControllerGame : MonoBehaviour
         info.Close();
     }
 
-    //MULTIPLE QUESTIONS --------------------------------------------
-
-    public void ShowMultipleQuestion(MultipleQuestion mc)
-    {
-        panelTrueFalse.SetActive(false);
-        panelOpen.SetActive(false);
-        panelMultiple.SetActive(true);
-
-        question.text = mc.Pregunta;
-        option1.text = mc.Option1;
-        option2.text = mc.Option2;
-        option3.text = mc.Option3;
-        option4.text = mc.Option4;
-        difficulty.text = mc.Difficult;
-
-        mc.Estado = true;
-
-        Debug.Log("Pregunta mostrada: " + mc.Question);
-    }
-
+    //METODOS DE VERIFICACIONES
     public void MultipleAnswerVerify(int option)
     {
-
         MultipleQuestion multipleQ = (MultipleQuestion)currentQuestion;
         bool correct = false;
 
@@ -298,37 +247,20 @@ public class ControllerGame : MonoBehaviour
         {
             title.text = "Correcto";
             description.text = multipleQ.Versiculo;
-            if (stateAnswer == true)
+            if (stateAnswer.Equals(true)) { correctAnswers++; stateAnswer = false; }
             {
                 correctAnswers++;
                 stateAnswer = false;
             }
-                
         }
         else
         {
             title.text = "Incorrecto";
             description.text = "Intenta de nuevo";
-            
         }
-        //ShowInScene();
+        
         panelNextLevel.SetActive(true);
     }
-
-    //TRUE FALSE QUESTIONS --------------------------------------------
-
-    public void ShowTrueFalseQuestion(TrueFalseQuestion tf)
-    {
-        panelMultiple.SetActive(false);
-        panelOpen.SetActive(false);
-        panelTrueFalse.SetActive(true);
-        question.text = tf.Pregunta;
-        difficulty.text = tf.Difficult;
-
-
-        tf.Estado = true;
-    }
-
     public void TrueFalseAnswerVerify(bool option)
     {
         TrueFalseQuestion trueFalseQ = (TrueFalseQuestion)currentQuestion;
@@ -348,11 +280,61 @@ public class ControllerGame : MonoBehaviour
         {
             title.text = "Incorrecto";
             description.text = "Intenta de nuevo";
-        
+
         }
     }
 
-    //OPEN QUESTIONS --------------------------------------------
+    public void OpenAnswerVerify()
+    {
+        AbiertasQuestion openQ = (AbiertasQuestion)currentQuestion;
+        answerOpen.text = openQ.Answer;
+        versiculoOpen.text = openQ.Versiculo;
+    }
+
+    void GameOver()
+    {
+        panelNextLevel.SetActive(true);
+        int total = list_questionsEasy.Count+ list_questionsHard.Count;
+        title.text = "<size=150%>¡Felicidades, has completado el juego!<size=150%>";
+        description.text = "Respuestas Correctas:\n " + correctAnswers + " de " + total;
+        buttonNext.SetActive(false);
+
+    }
+
+
+    //METODOS SHOW DE MOSTRAR 
+
+    public void ShowMultipleQuestion(MultipleQuestion mc)
+    {
+        panelTrueFalse.SetActive(false);
+        panelOpen.SetActive(false);
+        panelMultiple.SetActive(true);
+
+        question.text = mc.Pregunta;
+        option1.text = mc.Option1;
+        option2.text = mc.Option2;
+        option3.text = mc.Option3;
+        option4.text = mc.Option4;
+        difficulty.text = mc.Difficult;
+
+        mc.Estado = true;
+
+        Debug.Log("Pregunta mostrada: " + mc.Question);
+    }
+
+   
+
+    public void ShowTrueFalseQuestion(TrueFalseQuestion tf)
+    {
+        panelMultiple.SetActive(false);
+        panelOpen.SetActive(false);
+        panelTrueFalse.SetActive(true);
+        question.text = tf.Pregunta;
+        difficulty.text = tf.Difficult;
+
+
+        tf.Estado = true;
+    }
 
     public void ShowOpenQuestion(AbiertasQuestion oq)
     {
@@ -366,11 +348,5 @@ public class ControllerGame : MonoBehaviour
 
         oq.Estado = true;
     }
-    public void OpenAnswerVerify()
-    {
-        AbiertasQuestion openQ = (AbiertasQuestion)currentQuestion;
-        answerOpen.text = openQ.Answer;
-        versiculoOpen.text = openQ.Versiculo;
-    }
-
+    
 }
